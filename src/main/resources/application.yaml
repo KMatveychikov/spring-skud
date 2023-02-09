@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring-skud
+    username: postgres
+    password: admin
+  main:
+    allow-circular-references: true
