@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/skud-frontend-v2/node_modules
+/skud-frontend-v2/.idea

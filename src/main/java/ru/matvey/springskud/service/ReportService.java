@@ -1,6 +1,4 @@
 package ru.matvey.springskud.service;
-
-import com.google.common.collect.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.matvey.springskud.dto.WorkDayResponse;
@@ -13,10 +11,7 @@ import ru.matvey.springskud.repository.WorkDayRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class ReportService {
@@ -37,14 +32,8 @@ public class ReportService {
     SimpleDateFormat simpleDateFormatDateJs = new SimpleDateFormat("yyyy-MM-dd");
 
     public String getWorktimeOfDay(List<Pass> passes) {
-        if (passes.size() != 0) {
-            List<Pass> enters = passes.stream().filter(p -> Objects.equals(p.getDoorController().getDescription(), "enter")).toList();
-            List<Pass> exits = passes.stream().filter(p -> Objects.equals(p.getDoorController().getDescription(), "exit")).toList();
-
-            Pass firstEnter = enters.get(0);
-            Pass lastExit = Iterables.getLast(exits);
-
-            return timeService.convertMillisToString(lastExit.getDateTime().getTime() - firstEnter.getDateTime().getTime());
+        if (passes.size() > 0) {
+            return timeService.convertMillisToString(timeService.getFirstEnterAndLastExit(passes)[1].getDateTime().getTime() - timeService.getFirstEnterAndLastExit(passes)[0].getDateTime().getTime());
         } else {
             return null;
         }

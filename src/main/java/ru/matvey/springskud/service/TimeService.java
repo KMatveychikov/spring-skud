@@ -1,6 +1,5 @@
 package ru.matvey.springskud.service;
 
-import com.google.common.collect.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.matvey.springskud.model.Pass;
@@ -62,12 +61,7 @@ public class TimeService {
         Date end = timeService.getEndOfDay(timeService.convertToDate(date));
         List<Pass> passes = passRepository.findPassesByEmployee_NameAndDateTimeIsBetween(name, begin, end);
         if (passes.size() > 0) {
-            List<Pass> enters = passes.stream().filter(p -> Objects.equals(p.getDoorController().getDescription(), "enter")).toList();
-            List<Pass> exits = passes.stream().filter(p -> Objects.equals(p.getDoorController().getDescription(), "exit")).toList();
-
-            Pass firstEnter = enters.get(0);
-            Pass lastExit = Iterables.getLast(exits);
-            return lastExit.getDateTime().getTime() - firstEnter.getDateTime().getTime();
+            return getFirstEnterAndLastExit(passes)[1].getDateTime().getTime() - getFirstEnterAndLastExit(passes)[0].getDateTime().getTime();
         } else return 0;
     }
 
@@ -81,5 +75,13 @@ public class TimeService {
             result.add(timeService.convertToDate(date));
         }
         return result;
+    }
+
+    public Pass[] getFirstEnterAndLastExit(List<Pass> passes){
+        List<Pass> enters =  passes.stream().filter(p -> Objects.equals(p.getDoorController().getDescription(), "enter")).toList();
+        List<Pass> exits =  passes.stream().filter(p -> Objects.equals(p.getDoorController().getDescription(), "exit")).toList();
+        Pass firstEnter = enters.get(0);
+        Pass lastExit = exits.get(exits.size()-1);
+        return new Pass[]{firstEnter, lastExit};
     }
 }
