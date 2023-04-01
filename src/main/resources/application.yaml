@@ -8,4 +8,4 @@ spring:
     username: postgres
     password: admin
   main:
-    allow-circular-references: true
+    allow-circular-references: false

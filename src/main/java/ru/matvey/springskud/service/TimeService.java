@@ -19,8 +19,7 @@ import java.util.Objects;
 public class TimeService {
     @Autowired
     PassRepository passRepository;
-    @Autowired
-    TimeService timeService;
+
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
@@ -57,8 +56,8 @@ public class TimeService {
     }
 
     public long getWorkTimeOfDateAndNameInMillis(LocalDate date, String name) throws ParseException {
-        Date begin = timeService.getBeginOfDay(timeService.convertToDate(date));
-        Date end = timeService.getEndOfDay(timeService.convertToDate(date));
+        Date begin = getBeginOfDay(convertToDate(date));
+        Date end = getEndOfDay(convertToDate(date));
         List<Pass> passes = passRepository.findPassesByEmployee_NameAndDateTimeIsBetween(name, begin, end);
         if (passes.size() > 0) {
             return getFirstEnterAndLastExit(passes)[1].getDateTime().getTime() - getFirstEnterAndLastExit(passes)[0].getDateTime().getTime();
@@ -66,13 +65,13 @@ public class TimeService {
     }
 
     public List<Date> getDatesFromPeriod(Date begin, Date end) {
-        LocalDate beginDate = timeService.convertToLocalDate(begin);
-        LocalDate endDate = timeService.convertToLocalDate(end);
+        LocalDate beginDate = convertToLocalDate(begin);
+        LocalDate endDate = convertToLocalDate(end);
         List<LocalDate> dates = beginDate.datesUntil(endDate.plusDays(1)).toList();
         List<Date> result = new ArrayList<>();
 
         for (LocalDate date : dates) {
-            result.add(timeService.convertToDate(date));
+            result.add(convertToDate(date));
         }
         return result;
     }
