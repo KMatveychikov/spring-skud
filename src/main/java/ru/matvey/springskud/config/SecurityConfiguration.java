@@ -13,6 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -47,10 +48,10 @@ public class SecurityConfiguration {
 
     CorsConfigurationSource corsConfigurationSource = request -> {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-        config.setAllowedMethods(Collections.singletonList("*"));
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
         config.setAllowCredentials(true);
-        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setAllowedHeaders(List.of("*"));
         config.setMaxAge(3600L*3600L);
         return config;
     };
